@@ -1,5 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404
-from django.template import RequestContext
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 
 from blog.models import Entry
 from tagging.models import Tag, TaggedItem
@@ -13,7 +12,7 @@ def index(request):
 		'entries' : entries,
 		'recent_entries' : recent_entries,
 	}
-	return render_to_response('blog/blog_index.html', context, RequestContext(request))
+	return render(request, 'blog/blog_index.html', context)
 	
 def entries_by_year(request, year):
 	entries = get_list_or_404(Entry.objects.published(), date_published__year=year)
@@ -23,7 +22,7 @@ def entries_by_year(request, year):
 		'entries' : entries,
 		'recent_entries' : recent_entries,
 	}
-	return render_to_response('blog/blog_entries_by_year.html', context, RequestContext(request))
+	return render(request, 'blog/blog_entries_by_year.html', context)
 
 def entry_detail(request, year, slug):
 	entry = get_object_or_404(Entry.objects.published(), date_published__year=year, slug=slug)	
@@ -32,7 +31,7 @@ def entry_detail(request, year, slug):
 		'entry' : entry,
 		'recent_entries' : recent_entries,
 	}
-	return render_to_response('blog/blog_entry_detail.html', context, RequestContext(request))
+	return render(request, 'blog/blog_entry_detail.html', context)
 	
 def entries_by_tag(request, tag):
 	tag = Tag.objects.get(name=tag)
@@ -43,7 +42,7 @@ def entries_by_tag(request, tag):
 		'entries' : entries,
 		'recent_entries' : recent_entries,
 	}
-	return render_to_response('blog/blog_entries_by_tag.html', context, RequestContext(request))
+	return render(request, 'blog/blog_entries_by_tag.html', context)
 
 @permission_required('blog.change_entry', '/admin/')
 def entry_preview(request, year, slug):
@@ -51,4 +50,4 @@ def entry_preview(request, year, slug):
 	context = {
 		'entry' : entry,
 	}
-	return render_to_response('blog/blog_entry_detail.html', context, RequestContext(request))
+	return render(request, 'blog/blog_entry_detail.html', context)
