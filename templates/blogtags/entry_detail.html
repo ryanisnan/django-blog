@@ -1,0 +1,50 @@
+{% load tagging_tags %}
+{% load disqus_tags %}
+
+<div class="blog-entry">
+	<div class="date-tag-wrapper">
+		<div class="date-tag">
+			<p class="month-date">{{ entry.date_published|date:"M j"|upper }}</p>
+		</div>
+	</div>
+	<h2><a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a></h2>
+	
+	<div class="entry-content">
+			{% autoescape off %}
+			{{ entry.entry_html }}
+			{% endautoescape %}
+	</div>
+	
+	<!-- Post Meta -->
+	<div class="entry-meta">
+		<p class="meta">{{ entry.date_published|date:"F j, Y" }}</p>
+		{% tags_for_object entry as tag_list %}
+		{% if tag_list %}
+			{% for tag in tag_list %}
+		<p class="meta tag {% if forloop.last %}last{% endif %}"><a href="{% url blog_entries_by_tag tag.name %}">{% filter lower %}{{ tag.name }}{% endfilter %}</a></p>
+			{% endfor %}
+		{% endif %}
+		<p class="meta last"><a href="{{ entry.get_absolute_url }}#disqus_thread">X Comments</a></p>
+		{% disqus_num_replies %}
+	</div>
+
+	<!-- Next & Previous Posts -->
+	<div>
+		{% with entry.get_next_published_entry as next_published_entry %}
+		{% with entry.get_previous_published_entry as previous_published_entry %}
+			{% if next_published_entry %}
+		<a class="entry-navigation" href='{{ next_published_entry.get_absolute_url }}'>&lt;&lt; Next Post</a>
+			{% endif %}
+			{% if next_published_entry %}
+				{% if previous_published_entry %}	
+		<span class="entry-navigation">&nbsp;|&nbsp;</span>
+				{% endif %}
+			{% endif %}
+			{% if previous_published_entry %}
+		<a class="entry-navigation" href='{{ previous_published_entry.get_absolute_url }}'>Previous Post &gt;&gt;</a>
+			{% endif %}
+			
+		{% endwith %}
+		{% endwith %}
+	</div>
+</div>

@@ -1,0 +1,24 @@
+{% load blog_tags %}
+{% if years %}
+<ul>
+{% for year in years %}
+	<li>
+		<a id="blog-archive-{{ year|date:'Y' }}-link" href="{% url blog_entries_by_year year.year %}">{{ year|date:"Y" }}</a>
+		<div id="blog-archive-{{ year|date:'Y' }}-entries">
+			{% entry_list_for_year year.year %}
+		</div>
+		<script type="text/javascript">
+			$("#blog-archive-{{ year|date:'Y' }}-entries").hide();
+			$("#blog-archive-{{ year|date:'Y' }}-link").click(function(e) {
+				e.preventDefault();
+				if ($("#blog-archive-{{ year|date:'Y' }}-entries").is(':visible')) {
+					$("#blog-archive-{{ year|date:'Y' }}-entries").hide("fast");
+				} else {
+					$("#blog-archive-{{ year|date:'Y' }}-entries").show("fast");
+				}
+			});
+		</script>
+	</li>
+{% endfor %}
+</ul>
+{% endif %}

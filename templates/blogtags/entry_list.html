@@ -1,0 +1,7 @@
+{% if entries %}
+<ul>
+	{% for entry in entries %}
+		<li><a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a><span class="meta"> - {{ entry.date_published|date:"n/j/Y" }}</span></li>
+	{% endfor %}
+</ul>
+{% endif %}
